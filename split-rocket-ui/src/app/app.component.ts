@@ -70,6 +70,7 @@ export class AppComponent implements OnInit {
   }
 
   onSubmitForm(form: { value: any; }) {
+    if(form.value.tripName === undefined || form.value.memberCount === undefined) {
     this.appService.calculateExpenses(form.value).pipe(takeUntil(this.destroy$)).subscribe(data => {
       if(Array.isArray(data) && data.length > 0){
         this.showResult = true;
@@ -79,6 +80,7 @@ export class AppComponent implements OnInit {
         this.showEmptyResult = true;
       }
     });
+  }
   }
 
   reset(){
