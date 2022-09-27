@@ -75,7 +75,7 @@ creditors.forEach((creditor) => {
 
       if(Math.abs(creditor.newBalance)  < Math.abs(debitor.newBalance)){
         finalBalances.push({'from':debitor.name, 'to':creditor.name, 'amount':creditor.newBalance});
-        creditor.newBalance = Math.abs(debitor.newBalance) - Math.abs(creditor.newBalance);
+        debitor.newBalance = Math.abs(debitor.newBalance) - Math.abs(creditor.newBalance);
         creditor.done = true;
       }
 
@@ -90,6 +90,7 @@ creditors.forEach((creditor) => {
        else if(Math.abs(creditor.newBalance) > Math.abs(debitor.newBalance)){
         finalBalances.push({'from':debitor.name, 'to':creditor.name, 'amount':Math.abs(debitor.newBalance)});
         creditor.newBalance = Math.abs(creditor.newBalance) - Math.abs(debitor.newBalance);
+        debitor.done = true;
        }
 
     }
