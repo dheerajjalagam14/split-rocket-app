@@ -1,1 +1,104 @@
 <app-header></app-header>
+<form *ngIf="!showResult" class="trip-form" [formGroup]="userForm"  (submit)="onSubmitForm(userForm)">
+  <div>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>My Trip</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="primary-container">
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Enter Trip Name"
+              formControlName="tripName"
+            />
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              #inputRef
+              placeholder="Enter number of Members"
+              formControlName="memberCount"
+              (blur)="createMembers(inputRef)"
+            />
+          </mat-form-field>
+        </div>
+        <div formArrayName="members">
+          <div
+            class="members-container"
+            *ngFor="let group of membersArray.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <fieldset>
+              <legend>
+                <h3>Members: {{ i + 1 }}</h3>
+              </legend>
+              <div>
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Enter member name"
+                    formControlName="name"
+                  />
+                </mat-form-field>
+              </div>
+              <div formArrayName="expense">
+                <div
+                  *ngFor="
+                    let subgroup of getExpenses(group);
+                    let idx = index
+                  "
+                  [formGroupName]="idx"
+                >
+                  <mat-form-field class="expense-field">
+                    <input
+                      matInput
+                      placeholder="Expense name"
+                      formControlName="expenseTitle"
+                    />
+                  </mat-form-field>
+                  <mat-form-field class="expense-field">
+                    <input
+                      matInput
+                      type="number"
+                      placeholder="Amount"
+                      formControlName="amount"
+                    />
+                  </mat-form-field>
+                </div>
+                <button type="button" mat-raised-button (click)="addExpense(i)">
+                  Add Another Expense
+                </button>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <button type="submit" class="submit-button" mat-raised-button>Submit</button>
+</form>
+<div *ngIf="showResult" class="trip-form" >
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Balances</mat-card-title>
+    </mat-card-header>
+    <mat-card-content *ngIf="!showEmptyResult">
+      <div *ngFor="let balance of balances">
+        <div class="balance">
+          <span>{{getBalanceContent(balance)}}</span>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-content *ngIf="showEmptyResult">
+      <div>
+        <p>Thats Good! No one owes anything :)</p>
+      </div>
+    </mat-card-content>
+</mat-card>
+<button class="submit-button" (click)="reset();" mat-raised-button>Reset</button>
+
+</div>
