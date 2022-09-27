@@ -96,7 +96,6 @@ creditors.forEach((creditor) => {
     }
   });
 });
-console.log('finalBalances',finalBalances);
 
 return finalBalances;
 }
