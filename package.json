@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev" : "cd split-rocket-ui && npm run build && cd .. && nodemon index.js"
+    "dev" : "cd split-rocket-ui && npm run build && cd .. && nodemon index.js",
+    "start": "nodemon index.js"
   },
   "author": "Dheeraj Jalagam",
   "license": "ISC",
