@@ -1,36 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators, FormControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { AppService } from './app.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
-
 export class AppComponent implements OnInit {
-
+  userForm: FormGroup;
   showResult: boolean = false;
-  showEmptyResult :boolean = false;
-
+  showEmptyResult: boolean = false;
   balances: any[] = [];
-
-  constructor(private _fb: FormBuilder,
-    private appService: AppService) {}
-
-  userForm = this._fb.group({
-    tripName: ['', Validators.minLength(3)],
-    memberCount: [''],
-    members: this._fb.array([]),
-  });
-
   destroy$: Subject<boolean> = new Subject<boolean>();
 
-
+  constructor(private _fb: FormBuilder, private appService: AppService) {}
 
   ngOnInit() {
-
+    this.userForm = this._fb.group({
+      tripName: ['', [Validators.required, Validators.minLength(3)]],
+      memberCount: ['', Validators.required],
+      members: this._fb.array([]),
+    });
   }
 
   private memberObj(): FormGroup {
@@ -43,7 +41,14 @@ export class AppComponent implements OnInit {
   private expenseObj(): FormGroup {
     return this._fb.group({
       expenseTitle: ['', Validators.required],
-      amount: ['', Validators.required, [Validators.maxLength(5), Validators.pattern("^[0-9]*$"),]],
+      amount: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(5),
+          Validators.pattern('^[0-9]*$'),
+        ],
+      ],
     });
   }
 
@@ -55,7 +60,7 @@ export class AppComponent implements OnInit {
     return group.get('expense')['controls'];
   }
 
-  createMembers(input: { value: any; }): void {
+  createMembers(input: { value: any }): void {
     const value = input.value;
     for (let i = 0; i < value; i++) {
       this.membersArray.push(this.memberObj());
@@ -69,21 +74,24 @@ export class AppComponent implements OnInit {
     )).push(this.expenseObj());
   }
 
-  onSubmitForm(form: { value: any; }) {
-    if(form.value.tripName === undefined || form.value.memberCount === undefined) {
-    this.appService.calculateExpenses(form.value).pipe(takeUntil(this.destroy$)).subscribe(data => {
-      if(Array.isArray(data) && data.length > 0){
-        this.showResult = true;
-        this.balances = data
-      } else {
-        this.showResult = true;
-        this.showEmptyResult = true;
-      }
-    });
-  }
+  onSubmitForm(form: { value: any }) {
+    if (form.value.tripName && form.value.memberCount) {
+      this.appService
+        .calculateExpenses(form.value)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data) => {
+          if (Array.isArray(data) && data.length > 0) {
+            this.showResult = true;
+            this.balances = data;
+          } else {
+            this.showResult = true;
+            this.showEmptyResult = true;
+          }
+        });
+    }
   }
 
-  reset(){
+  reset() {
     this.userForm = this._fb.group({
       tripName: ['', Validators.minLength(3)],
       memberCount: [''],
@@ -95,8 +103,8 @@ export class AppComponent implements OnInit {
     this.showEmptyResult = false;
   }
 
-  getBalanceContent(balance:any){
-    return "*" + balance.from + " owes " + balance.to + " $" + balance.amount;
+  getBalanceContent(balance: any) {
+    return '*' + balance.from + ' owes ' + balance.to + ' $' + balance.amount;
   }
 
   ngOnDestroy() {
