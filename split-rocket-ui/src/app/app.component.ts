@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
     private appService: AppService) {}
 
   userForm = this._fb.group({
-    tripName: ['', Validators.minLength(2)],
+    tripName: ['', Validators.minLength(3)],
     memberCount: [''],
     members: this._fb.array([]),
   });
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
   private expenseObj(): FormGroup {
     return this._fb.group({
       expenseTitle: ['', Validators.required],
-      amount: ['', Validators.required, [Validators.maxLength(10), Validators.pattern("^[0-9]*$"),]],
+      amount: ['', Validators.required, [Validators.maxLength(5), Validators.pattern("^[0-9]*$"),]],
     });
   }
 
