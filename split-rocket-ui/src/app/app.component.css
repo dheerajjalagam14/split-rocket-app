@@ -1,0 +1,25 @@
+p {
+  font-family: Lato;
+}
+
+.primary-container {
+  margin: 5px;
+  margin-bottom: 15px;
+}
+
+.primary-container mat-form-field {
+  margin-right: 10px;
+}
+
+.trip-form{
+  max-width: 500px;
+  margin: 50px auto;
+}
+
+.submit-button{
+  margin: 10px;
+}
+
+.expense-field{
+  margin-right: 10px;
+}
